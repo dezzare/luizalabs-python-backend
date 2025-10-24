@@ -1,6 +1,6 @@
 # DESAFIO
 # 1   - O desafio consiste em deixar o código mais modularizado. 
-# 2   - Criar as seguintes funções, como requisito mínimo: sacar, depositar, visualizar historico, criar usuário, criar conta corrente.
+# 2   - Criar as seguintes funções, como requisito mínimo: sacar, depositar, visualizar historico (extrato), criar usuário, criar conta corrente.
 # 3   - Cada função terá uma regra de passagem de argumento.
 # 3.1 - SAQUE: recebe argumentos somente por nome (keyword only). 
 # 3.2 - DEPOSITAR: recebe argumentos por posição (positional only)
@@ -45,6 +45,18 @@ def sacar(*, saldo, valor, extrato, limite, numero_saques, limite_saques):
     return saldo, extrato
 
 
+def depositar(saldo, valor, extrato, /):
+    if valor > 0:
+        saldo += valor
+        extrato += f"Depósito: R$ {valor:.2f}\n"
+        print("\n*** Depósito realizado com sucesso ***")
+    else:
+        print("\n*** ERRO: valor informado é inválido ***")
+
+    return saldo, extrato
+
+
+
 menu = """
 
 [1] Sacar
@@ -77,14 +89,9 @@ while True:
                     )
 
     elif opcao == "2":
-        valor = float(input("Informe o valor do depósito: "))
+        valor = float(input("Informe o valor à ser depositado: "))
 
-        if valor > 0:
-            saldo += valor
-            extrato += f"Depósito: R$ {valor:.2f}\n"
-
-        else:
-            print("Operação falhou! O valor informado é inválido.")
+        saldo, extrato = depositar(saldo, valor, extrato)
 
     elif opcao == "3":
         print("\n================ EXTRATO ================")
