@@ -55,6 +55,13 @@ def depositar(saldo, valor, extrato, /):
 
     return saldo, extrato
 
+def imprime_extrato(saldo, /, *, extrato):
+        print("\n================ EXTRATO ================")
+        print("Não foram realizadas movimentações." if not extrato else extrato)
+        print(f"\nSaldo: R$ {saldo:.2f}")
+        print("==========================================")
+
+
 
 
 menu = """
@@ -94,10 +101,7 @@ while True:
         saldo, extrato = depositar(saldo, valor, extrato)
 
     elif opcao == "3":
-        print("\n================ EXTRATO ================")
-        print("Não foram realizadas movimentações." if not extrato else extrato)
-        print(f"\nSaldo: R$ {saldo:.2f}")
-        print("==========================================")
+        imprime_extrato(saldo, extrato=extrato)
 
     elif opcao == "0":
         break
