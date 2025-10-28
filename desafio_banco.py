@@ -40,7 +40,7 @@ def sacar(*, saldo, valor, extrato, limite, numero_saques, limite_saques):
         print(f"*** Seu saldo atual é de: {saldo} ***")
     
     else:
-        print("\nERRO: Valor informado é inválido")
+        print("\n*** ERRO: Valor informado é inválido ***")
     
     return saldo, extrato
 
@@ -55,12 +55,35 @@ def depositar(saldo, valor, extrato, /):
 
     return saldo, extrato
 
-def imprime_extrato(saldo, /, *, extrato):
-        print("\n================ EXTRATO ================")
-        print("Não foram realizadas movimentações." if not extrato else extrato)
-        print(f"\nSaldo: R$ {saldo:.2f}")
-        print("==========================================")
 
+def imprime_extrato(saldo, /, *, extrato):
+    print("\n================ EXTRATO ================")
+    print("Não foram realizadas movimentações." if not extrato else extrato)
+    print(f"\nSaldo: R$ {saldo:.2f}")
+    print("==========================================")
+
+
+def criar_usuario(registro_usuarios):
+    cpf = input("Informe o CPF (somente número): ")
+    
+    if is_usuario(cpf, registro_usuarios):
+        print("\n*** ERRO: Já existe usuário com esse CPF! ***")
+        return
+
+    nome = input("Informe o nome completo: ")
+    data_nascimento = input("Informe a data de nascimento (dd-mm-aaaa): ")
+    endereco = input("Informe o endereço (logradouro, nro - bairro - cidade/sigla estado): ")
+
+    registro_usuarios.append({"nome": nome, "data_nascimento": data_nascimento, "cpf": cpf, "endereco": endereco})
+
+    print("*** Usuário criado com sucesso! ***")
+
+
+def is_usuario(cpf, registro_usuarios):
+    for usuario in registro_usuarios:
+        if usuario["cpf"] == cpf:
+            return True
+    return False
 
 
 
@@ -69,15 +92,18 @@ menu = """
 [1] Sacar
 [2] Depositar
 [3] Extrato
+[4] Novo Usuário
 [0] Sair
 
 => """
+
+LIMITE_SAQUES = 3
 
 saldo = 0
 limite = 500
 extrato = ""
 numero_saques = 0
-LIMITE_SAQUES = 3
+registro_usuarios = []
 
 while True:
 
@@ -102,6 +128,9 @@ while True:
 
     elif opcao == "3":
         imprime_extrato(saldo, extrato=extrato)
+
+    elif opcao == "4":
+        criar_usuario()
 
     elif opcao == "0":
         break
