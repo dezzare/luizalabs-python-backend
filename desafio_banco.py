@@ -19,6 +19,7 @@
 # 5.5 - USUÁRIO pode ter mais de uma conta.
 # 5.6 - CONTA pertence somente a UM usuário.
 # 6   - O retorno e a forma como serão chamadas pode ser definida a critério do desafiado.
+# 7   - Sugerido criar uma função para listar contas.
 
 
 def sacar(*, saldo, valor, extrato, limite, numero_saques, limite_saques):
@@ -99,19 +100,27 @@ def criar_conta(agencia, registro_contas, registro_usuarios):
         
     print("\n*** ERRO: Usuário não encontrado, operação cancelada")
     return
-    
+
+
+def imprime_lista_contas(registro_contas):
+    print("\n*** Listando Contas Cadastradas: ***")
+    for conta in registro_contas:
+        print(f"\nAgência:{conta['agencia']}\nConta:{conta['numero_conta']}\nTitular:{conta['usuario']['nome']}")
+    print("*** Fim da lista de Contas Cadastradas ***")
+
 
 def main():
     AGENCIA = "0001"
     LIMITE_SAQUES = 3
-    MENU = """*** SELECIONE UMA OPÇÃO ***
+    MENU = """\n*** SELECIONE UMA OPÇÃO ***
 
     [1] Sacar
     [2] Depositar
     [3] Extrato
     [4] Novo Usuário
     [5] Nova Conta
-    
+    [6] Listar Contas
+
     [0] Sair
     \n=> """
 
@@ -156,6 +165,9 @@ def main():
 
         elif opcao == "5":
             criar_conta(AGENCIA, registro_contas, registro_usuarios)
+        
+        elif opcao == "6":
+            imprime_lista_contas(registro_contas)
 
         elif opcao == "0":
             break
