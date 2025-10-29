@@ -65,8 +65,8 @@ def imprime_extrato(saldo, /, *, extrato):
 
 def criar_usuario(registro_usuarios):
     cpf = input("Informe o CPF (somente número): ")
-    
-    if is_usuario(cpf, registro_usuarios):
+    ok, _ = is_usuario(cpf, registro_usuarios)
+    if ok:
         print("\n*** ERRO: Já existe usuário com esse CPF! ***")
         return
 
@@ -82,9 +82,24 @@ def criar_usuario(registro_usuarios):
 def is_usuario(cpf, registro_usuarios):
     for usuario in registro_usuarios:
         if usuario["cpf"] == cpf:
-            return True
-    return False
+            return True, usuario
+    return False, None
 
+
+def criar_conta(registro_contas, registro_usuarios):
+    cpf = input("Informe o CPF (somente número): ")
+    ok, usuario = is_usuario(cpf, registro_usuarios)
+
+    if ok:
+        numero_conta = len(registro_contas) + 1
+        conta = {"agencia": "0001", "numero_conta": numero_conta, "usuario": usuario}
+        registro_contas.append(conta)
+        print("\n*** Conta criada com sucesso ***")
+        return
+        
+    print("\n*** ERRO: Usuário não encontrado, operação cancelada")
+    return
+    
 
 
 menu = """
@@ -93,6 +108,7 @@ menu = """
 [2] Depositar
 [3] Extrato
 [4] Novo Usuário
+[5] Nova Conta
 [0] Sair
 
 => """
@@ -104,8 +120,13 @@ limite = 500
 extrato = ""
 numero_saques = 0
 registro_usuarios = []
+registro_contas = []
 
 while True:
+    # print("\n*** DEBUG ***")
+    # print("USUARIOS: ", registro_usuarios)
+    # print("CONTAS: ", registro_contas)
+    # print("****************")
 
     opcao = input(menu)
 
@@ -130,7 +151,10 @@ while True:
         imprime_extrato(saldo, extrato=extrato)
 
     elif opcao == "4":
-        criar_usuario()
+        criar_usuario(registro_usuarios)
+
+    elif opcao == "5":
+        criar_conta(registro_contas, registro_usuarios)
 
     elif opcao == "0":
         break
